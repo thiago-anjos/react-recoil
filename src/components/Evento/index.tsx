@@ -2,16 +2,12 @@ import React from "react";
 import { IEvento } from "../../interfaces/IEvento";
 import style from "./Evento.module.scss";
 import EventoCheckbox from "./EventoCheckbox";
-import { useSetRecoilState } from "recoil";
-import { eventsListState } from "../../state/atom";
+import useDeletarEvento from "../../state/hooks/useDeletarEvento";
 
 const Evento: React.FC<{ evento: IEvento }> = ({ evento }) => {
   const estilos = [style.Evento];
-  const setStateEventList = useSetRecoilState<IEvento[]>(eventsListState);
 
-  const deleteEvent = () => {
-    setStateEventList((prevList) => prevList.filter((evt) => evt.id !== evento.id));
-  };
+  const deleteEvent = useDeletarEvento();
 
   if (evento.completo) {
     estilos.push(style.completo);
@@ -25,7 +21,7 @@ const Evento: React.FC<{ evento: IEvento }> = ({ evento }) => {
           {evento.descricao} - {evento.inicio.toLocaleDateString()}
         </h3>
       </div>
-      <i className="far fa-times-circle fa-2x" onClick={deleteEvent}></i>
+      <i className="far fa-times-circle fa-2x" onClick={() => deleteEvent(evento)}></i>
     </div>
   );
 };
